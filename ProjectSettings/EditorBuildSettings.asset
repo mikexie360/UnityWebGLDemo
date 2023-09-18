@@ -4,5 +4,29 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Init.unity
+    guid: 156529983b38c0e41a68c6f7eb08aa9f
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Loading.unity
+    guid: 4a46526aa263afd4082d9afb52c6d9af
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Lobby.unity
+    guid: b56fec538980a574092fd6be711a646c
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Main Menu.unity
+    guid: ff7dc44ecf4b92640964a01b6d4f761d
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Netcode Test.unity
+    guid: 70bb2cec758b1034bb3ee47c6b1d1951
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Maps/BlueScene.unity
+    guid: b9e3814fad604c54c907e2d955a16dd1
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Maps/GreenScene.unity
+    guid: 39bdff1c1aa5328469e69f4e0727705b
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Maps/RedScene.unity
+    guid: e1f6fc0516fe51948b76fb105bc701ad
   m_configObjects: {}
