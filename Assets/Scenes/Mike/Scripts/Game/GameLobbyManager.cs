@@ -106,6 +106,11 @@ namespace Game
             return _lobbyPlayerDatas;
         }
 
+        public LobbyPlayerData GetLocalPlayer()
+        {
+            return _localLobbyPlayerData;
+        }
+
         public async Task<bool> SetPlayerReady()
         {
             Debug.Log(_localLobbyPlayerData);

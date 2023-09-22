@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Game;
 using GameFramework.Core.Data;
 using Unity.Services.Lobbies.Models;
 using GameFramework.Events;
@@ -19,6 +20,9 @@ public class TextChatManager : MonoBehaviour
     private TMPro.TMP_InputField _messageField;
     private Image _messageBackground;
 
+    private GameLobbyManager _gameLobby;
+    private LobbyPlayerData _player;
+
     private IEnumerator _activeCoroutine;
     private void OnEnable()
     {
@@ -33,6 +37,9 @@ public class TextChatManager : MonoBehaviour
         _messageInput.enabled = false;
         _placeholderMessage.SetActive(false);
         _messageBackground.enabled = false;
+
+        _gameLobby = GameLobbyManager.Instance;
+        _player = _gameLobby.GetLocalPlayer();
     }
 
     private void OnDisable()
@@ -50,8 +57,7 @@ public class TextChatManager : MonoBehaviour
         string ret = "";
         while (traversal != null)
         {
-            Message m = traversal.GetNode();
-            ret += m.GetId() + ": " + m.GetMessage() + "\n"; // UPDATE THIS WHEN I FIGURE OUT PLAYER ID STUFF
+            ret += traversal.GetNode().ToString() + "\n";
             traversal = traversal.GetNext();
         }
         return ret;
@@ -100,12 +106,12 @@ public class TextChatManager : MonoBehaviour
                 Debug.Log(message);
                 if (_messageLogHead == null)
                 {
-                    _messageLogHead = new DoublyLinkedList<Message>(new Message(null, message)); // FILL IN THIS NULL WITH PLAYER INFO
+                    _messageLogHead = new DoublyLinkedList<Message>(new Message(_player, message));
                     _messageLogTail = _messageLogHead;
                     _messageLogCount = 1;
                 } else
                 {
-                    _messageLogTail.SetNext(new DoublyLinkedList<Message>(new Message(null, message), _messageLogTail)); // FILL IN THIS NULL WITH PLAYER INFO);
+                    _messageLogTail.SetNext(new DoublyLinkedList<Message>(new Message(_player, message), _messageLogTail));
                     _messageLogTail = _messageLogTail.GetNext();
                     if (_messageLogCount >= MAX_MESSAGE_LOG)
                     {
@@ -123,7 +129,6 @@ public class TextChatManager : MonoBehaviour
                 _placeholderMessage.SetActive(false);
                 _messageBackground.enabled = false;
 
-                // WANT TO CHANGE THIS TO A TIMER
                 _activeCoroutine = HideTimer();
                 StartCoroutine(_activeCoroutine);
             }

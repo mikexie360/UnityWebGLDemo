@@ -16,8 +16,13 @@ public class Message
         return _message;
     }
 
-    public LobbyPlayerData GetId()
+    public string GetId()
     {
-        return _player;
+        return _player.Gamertag;
+    }
+
+    public string ToString()
+    {
+        return _player.Gamertag + ": " + _message;
     }
 }
