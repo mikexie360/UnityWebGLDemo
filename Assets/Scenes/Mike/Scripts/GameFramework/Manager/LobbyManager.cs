@@ -160,6 +160,29 @@ namespace GameFramework.Manager
             return true;
         }
 
+        public async Task<bool> UpdatePlayerData(string playerId, Dictionary<string, string> data, string allocationId = default, string connectionData = default)
+        {
+            Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
+            UpdatePlayerOptions options = new UpdatePlayerOptions()
+            {
+                Data = playerData,
+                AllocationId = allocationId,
+                ConnectionInfo = connectionData
+            };
+            try
+            {
+                _lobby = await LobbyService.Instance.UpdatePlayerAsync(_lobby.Id, playerId, options);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            LobbyEvents.OnLobbyUpdated(_lobby);
+
+            return true;
+        }
+
         public async Task<bool> UpdateLobbyData(Dictionary<string, string> data)
         {
             Dictionary<string, DataObject> lobbyData = SerializeLobbyData(data);

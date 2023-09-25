@@ -30,6 +30,7 @@ namespace Game
             {
                 _leftButton.onClick.AddListener(OnLeftButtonClicked);
                 _rightButton.onClick.AddListener(OnRightButtonClicked);
+                _startButton.onClick.AddListener(OnStartButtonClicked);
                 Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
             }
             _readyButton.onClick.AddListener(OnReadyPressed);
@@ -44,6 +45,7 @@ namespace Game
             _rightButton.onClick.RemoveAllListeners();
             
             _readyButton.onClick.RemoveAllListeners();
+            _startButton?.onClick.RemoveAllListeners();
 
             Events.LobbyEvents.OnLobbyReady -= OnLobbyReady;
 
@@ -70,7 +72,7 @@ namespace Game
                 _currentMapIndex = _mapSelectionData.Maps.Count - 1;
             }
             UpdateMap();
-            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
+            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
         }
 
         private async void OnRightButtonClicked()
@@ -84,7 +86,7 @@ namespace Game
                 _currentMapIndex = 0;
             }
             UpdateMap();
-            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
+            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
 
         }
 
@@ -104,6 +106,10 @@ namespace Game
                 _leftButton.gameObject.SetActive(false);
                 _rightButton.gameObject.SetActive(false);
             }
+            else
+            {
+                GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
+            }
         }
 
         // Update is called once per frame
@@ -122,6 +128,11 @@ namespace Game
         private void OnLobbyReady()
         {
             _startButton.gameObject.SetActive(true);
+        }
+
+        private async void OnStartButtonClicked()
+        {
+            await GameLobbyManager.Instance.StartGame();
         }
     }
 }
