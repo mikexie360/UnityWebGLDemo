@@ -21,8 +21,15 @@ public class Message
         return _player.Gamertag;
     }
 
-    public string ToString()
+    public override string ToString()
     {
-        return _player.Gamertag + ": " + _message;
+        if (_player == null)
+        {
+            return "Username: " + _message;
+        }
+        else
+        {
+            return _player.Gamertag + ": " + _message;
+        }
     }
 }
