@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameFramework.Core
 {
-    public class MySingleton<T> : MonoBehaviour where T : Component
+    public class Singleton<T> : MonoBehaviour where T : Component
     {
-
         private static T _instance;
         // Start is called before the first frame update
         public static T Instance
@@ -30,6 +26,7 @@ namespace GameFramework.Core
                         DontDestroyOnLoad(go);
                     }
                 }
+
                 return _instance;
             }
         }

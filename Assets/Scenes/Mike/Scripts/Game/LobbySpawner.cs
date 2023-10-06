@@ -1,8 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Game.Events;
 using GameFramework.Core.Data;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game
@@ -21,6 +20,11 @@ namespace Game
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
         }
 
+        private void Start()
+        {
+            OnLobbyUpdated();
+        }
+
         private void OnLobbyUpdated()
         {
             List<LobbyPlayerData> playerDatas = GameLobbyManager.Instance.GetPlayers();
@@ -30,7 +34,6 @@ namespace Game
                 LobbyPlayerData data = playerDatas[i];
                 _players[i].SetData(data);
             }
-
         }
     }
 }
