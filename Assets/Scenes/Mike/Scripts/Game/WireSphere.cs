@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,6 @@ namespace Game
     {
         [SerializeField] private Color _color;
         [SerializeField] private float _size;
-
         private void OnDrawGizmos()
         {
             Gizmos.color = _color;

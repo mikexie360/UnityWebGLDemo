@@ -1,8 +1,8 @@
-using Game.Events;
-using GameFramework.Core.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Events;
+using GameFramework.Core.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,81 +20,35 @@ namespace Game
         [SerializeField] private TextMeshProUGUI _mapName;
         [SerializeField] private MapSelectionData _mapSelectionData;
 
-
-
         private int _currentMapIndex = 0;
 
         private void OnEnable()
         {
+            _readyButton.onClick.AddListener(OnReadyPressed);
             if (GameLobbyManager.Instance.IsHost)
             {
                 _leftButton.onClick.AddListener(OnLeftButtonClicked);
                 _rightButton.onClick.AddListener(OnRightButtonClicked);
-                Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
+                _startButton.onClick.AddListener(OnStartButtonClicked);
+                LobbyEvents.OnLobbyReady += OnLobbyReady;
             }
-            _readyButton.onClick.AddListener(OnReadyPressed);
 
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
-        }
 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
 
         private void OnDisable()
         {
+            _readyButton.onClick.RemoveAllListeners();
             _leftButton.onClick.RemoveAllListeners();
             _rightButton.onClick.RemoveAllListeners();
-            
-            _readyButton.onClick.RemoveAllListeners();
-
-            Events.LobbyEvents.OnLobbyReady -= OnLobbyReady;
-
+            _startButton.onClick.RemoveAllListeners();
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
-
-        }
-        private async void OnReadyPressed()
-        {
-            bool succeed = await GameLobbyManager.Instance.SetPlayerReady();
-            if (succeed)
-            {
-                _readyButton.gameObject.SetActive(false);
-            }
+            LobbyEvents.OnLobbyReady -= OnLobbyReady;
         }
 
-        private async void OnLeftButtonClicked()
-        {
-            if(_currentMapIndex - 1 >= 0)
-            {
-                _currentMapIndex--;
-            }
-            else
-            {
-                _currentMapIndex = _mapSelectionData.Maps.Count - 1;
-            }
-            UpdateMap();
-            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
-        }
-
-        private async void OnRightButtonClicked()
-        {
-            if (_currentMapIndex + 1 < _mapSelectionData.Maps.Count)
-            {
-                _currentMapIndex++;
-            }
-            else
-            {
-                _currentMapIndex = 0;
-            }
-            UpdateMap();
-            _ = GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
-
-        }
-
-        private void UpdateMap()
-        {
-            _mapImage.color = _mapSelectionData.Maps[_currentMapIndex].MapThumbnail;
-            _mapName.text = _mapSelectionData.Maps[_currentMapIndex].MapName;
-        }
-
-        // Start is called before the first frame update
         void Start()
         {
             _lobbyCodeText.text = $"Lobby code: {GameLobbyManager.Instance.GetLobbyCode()}";
@@ -104,24 +58,71 @@ namespace Game
                 _leftButton.gameObject.SetActive(false);
                 _rightButton.gameObject.SetActive(false);
             }
+            else
+            {
+                GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private async void OnLeftButtonClicked()
         {
-            _lobbyCodeText.text = $"Lobby code: {GameLobbyManager.Instance.GetLobbyCode()}";
+            if (_currentMapIndex - 1 > 0)
+            {
+                _currentMapIndex--;
+            }
+            else
+            {
+                _currentMapIndex = 0;
+            }
 
+            UpdateMap();
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
+        }
+
+        private async void OnRightButtonClicked()
+        {
+            if (_currentMapIndex + 1 < _mapSelectionData.Maps.Count - 1)
+            {
+                _currentMapIndex++;
+            }
+            else
+            {
+                _currentMapIndex = _mapSelectionData.Maps.Count - 1;
+            }
+
+            UpdateMap();
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.Maps[_currentMapIndex].SceneName);
+        }
+
+        private async void OnReadyPressed()
+        {
+            bool succeed = await GameLobbyManager.Instance.SetPlayerReady();
+            if (succeed)
+            {
+                _readyButton.gameObject.SetActive(false);
+            }
+        }
+
+        private void UpdateMap()
+        {
+            _mapImage.color = _mapSelectionData.Maps[_currentMapIndex].MapThumbnail;
+            _mapName.text = _mapSelectionData.Maps[_currentMapIndex].MapName;
         }
 
         private void OnLobbyUpdated()
         {
-            _currentMapIndex =  GameLobbyManager.Instance.GetMapIndex();
+            _currentMapIndex = GameLobbyManager.Instance.GetMapIndex();
             UpdateMap();
         }
 
         private void OnLobbyReady()
         {
             _startButton.gameObject.SetActive(true);
+        }
+
+        private async void OnStartButtonClicked()
+        {
+            await GameLobbyManager.Instance.StartGame();
         }
     }
 }

@@ -1,23 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
-using UnityEngine;
 
 namespace GameFramework.Core.Data
 {
-    public class LobbyPlayerData : MonoBehaviour
+    public class LobbyPlayerData
     {
         private string _id;
         private string _gamertag;
         private bool _isReady;
 
-        // setters and getters
-        public string Id {
-            get => _id;
-            set => _id = value;
-        }
+        public string Id => _id;
         public string Gamertag => _gamertag;
-        public bool IsReady {
+
+        public bool IsReady
+        {
             get => _isReady;
             set => _isReady = value;
         }
@@ -31,7 +27,6 @@ namespace GameFramework.Core.Data
         public void Initialize(Dictionary<string, PlayerDataObject> playerData)
         {
             UpdateState(playerData);
-
         }
 
         public void UpdateState(Dictionary<string, PlayerDataObject> playerData)
@@ -46,17 +41,19 @@ namespace GameFramework.Core.Data
             }
             if (playerData.ContainsKey("IsReady"))
             {
+
                 _isReady = playerData["IsReady"].Value == "True";
             }
         }
 
         public Dictionary<string, string> Serialize()
         {
-            return new Dictionary<string, string>() 
+            return new Dictionary<string, string>()
             {
-                { "Id", _id},
-                { "Gamertag", _gamertag},
-                { "IsReady", _isReady.ToString()}
+                {"Id", _id},
+                {"Gamertag", _gamertag},
+                {"IsReady", _isReady.ToString()},
+                {"Attibute1", "sadasdsa"}
             };
         }
     }
