@@ -3,7 +3,7 @@ using Game.Events;
 
 namespace Game
 {
-    public class DeviceManager : MySingleton<DeviceManager>
+    public class DeviceManager : Singleton<DeviceManager>
     {
         private string inputDevice;
         private string outputDevice;
