@@ -6,131 +6,158 @@ using Game;
 using GameFramework.Core.Data;
 using Unity.Services.Lobbies.Models;
 using GameFramework.Events;
+using GameFramework.Network.Chat;
 
-public class TextChatManager : MonoBehaviour
+namespace GameFramework.Core.GameFramework.Manager
 {
-    private TMPro.TextMeshProUGUI _messageLogObject;
-    private DoublyLinkedList<Message> _messageLogHead;
-    private DoublyLinkedList<Message> _messageLogTail;
-    private int _messageLogCount = 0;
-    private const int MAX_MESSAGE_LOG = 50;
-
-    private TMPro.TextMeshProUGUI _messageInput;
-    private GameObject _placeholderMessage;
-    private TMPro.TMP_InputField _messageField;
-    private Image _messageBackground;
-
-    private GameLobbyManager _gameLobby;
-    private LobbyPlayerData _player;
-
-    private IEnumerator _activeCoroutine;
-    private void OnEnable()
+    public class TextChatManager : Singleton<TextChatManager>
     {
-        _messageLogObject = gameObject.transform.parent.Find("Log").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+        private TMPro.TextMeshProUGUI _messageLogObject;
+        private DoublyLinkedList<Message> _messageLogHead;
+        private DoublyLinkedList<Message> _messageLogTail;
+        private int _messageLogCount = 0;
+        private const int MAX_MESSAGE_LOG = 50;
 
-        _messageInput = gameObject.transform.GetChild(0).gameObject.transform.Find("Text").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
-        _placeholderMessage = gameObject.transform.GetChild(0).gameObject.transform.Find("Placeholder").gameObject;
-        _messageField = gameObject.GetComponent<TMPro.TMP_InputField>();
-        _messageBackground = GetComponent<Image>();
+        private TMPro.TextMeshProUGUI _messageInput;
+        private GameObject _placeholderMessage;
+        private TMPro.TMP_InputField _messageField;
+        private Image _messageBackground;
 
-        _messageLogObject.enabled = false;
-        _messageInput.enabled = false;
-        _placeholderMessage.SetActive(false);
-        _messageBackground.enabled = false;
+        private GameLobbyManager _gameLobby;
+        private LobbyPlayerData _player;
 
-        _gameLobby = GameLobbyManager.Instance;
-        _player = _gameLobby.GetLocalPlayer();
-    }
+        private NetworkTextComponent _server;
 
-    private void OnDisable()
-    {
 
-    }
-
-    private string GetMessageLog()
-    {
-        if (_messageLogHead == null)
+        private IEnumerator _activeCoroutine;
+        private void OnEnable()
         {
-            return "";
+            _messageLogObject = gameObject.transform.parent.Find("Log").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+
+            _messageInput = gameObject.transform.GetChild(0).gameObject.transform.Find("Text").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+            _placeholderMessage = gameObject.transform.GetChild(0).gameObject.transform.Find("Placeholder").gameObject;
+            _messageField = gameObject.GetComponent<TMPro.TMP_InputField>();
+            _messageBackground = GetComponent<Image>();
+
+            _messageLogObject.enabled = false;
+            _messageInput.enabled = false;
+            _placeholderMessage.SetActive(false);
+            _messageBackground.enabled = false;
+
+            _gameLobby = GameLobbyManager.Instance;
+            _player = _gameLobby.GetLocalPlayer();
+            _server = (NetworkTextComponent)gameObject.GetComponent(typeof(NetworkTextComponent));
+            //var a = NetworkManager.Instance;
         }
-        DoublyLinkedList<Message> traversal = _messageLogHead;
-        string ret = "";
-        while (traversal != null)
+
+        private void OnDisable()
         {
-            ret += traversal.GetNode().ToString() + "\n";
-            traversal = traversal.GetNext();
+
         }
-        return ret;
-    }
 
-    private void DisplayTextObjects()
-    {
-        _messageLogObject.enabled = true;
-        _messageField.Select();
-        _messageInput.enabled = true;
-        _placeholderMessage.SetActive(true);
-        _messageBackground.enabled = true;
-    }
-
-    private void HideTextObjects()
-    {
-        _messageLogObject.enabled = false;
-    }
-
-    private IEnumerator HideTimer()
-    {
-        yield return new WaitForSeconds(5f);
-        HideTextObjects();
-    }
-
-    private void Start()
-    {
-     
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+        private string GetMessageLog()
         {
-            if (!_messageInput.enabled)
+            if (_messageLogHead == null)
             {
-                DisplayTextObjects();
-                if (_activeCoroutine != null)
-                {
-                    StopCoroutine(_activeCoroutine);
-                }
-            } else
+                return "";
+            }
+            DoublyLinkedList<Message> traversal = _messageLogHead;
+            string ret = "";
+            while (traversal != null)
             {
-                string message = _messageInput.text;
-                Debug.Log(message);
-                if (_messageLogHead == null)
+                ret += traversal.GetNode().ToString() + "\n";
+                traversal = traversal.GetNext();
+            }
+            return ret;
+        }
+
+        public void AddMessage(string player, string message)
+        {
+            Debug.Log(message);
+            if (_messageLogHead == null)
+            {
+                _messageLogHead = new DoublyLinkedList<Message>(new Message(player, message));
+                _messageLogTail = _messageLogHead;
+                _messageLogCount = 1;
+            }
+            else
+            {
+                _messageLogTail.SetNext(new DoublyLinkedList<Message>(new Message(player, message), _messageLogTail));
+                _messageLogTail = _messageLogTail.GetNext();
+                if (_messageLogCount >= MAX_MESSAGE_LOG)
                 {
-                    _messageLogHead = new DoublyLinkedList<Message>(new Message(_player, message));
-                    _messageLogTail = _messageLogHead;
-                    _messageLogCount = 1;
-                } else
+                    _messageLogHead = _messageLogHead.GetNext();
+                }
+                else
                 {
-                    _messageLogTail.SetNext(new DoublyLinkedList<Message>(new Message(_player, message), _messageLogTail));
-                    _messageLogTail = _messageLogTail.GetNext();
-                    if (_messageLogCount >= MAX_MESSAGE_LOG)
+                    _messageLogCount++;
+                }
+            }
+            _messageLogObject.text = GetMessageLog();
+
+            _messageField.text = "";
+            _messageInput.enabled = false;
+            _placeholderMessage.SetActive(false);
+            _messageBackground.enabled = false;
+
+            _activeCoroutine = HideTimer();
+            StartCoroutine(_activeCoroutine);
+        }
+
+        private void DisplayTextObjects()
+        {
+            _messageLogObject.enabled = true;
+            _messageField.Select();
+            _messageField.ActivateInputField();
+            _messageInput.enabled = true;
+            _placeholderMessage.SetActive(true);
+            _messageBackground.enabled = true;
+        }
+
+        private void HideTextObjects()
+        {
+            _messageLogObject.enabled = false;
+        }
+
+        private IEnumerator HideTimer()
+        {
+            yield return new WaitForSeconds(5f);
+            HideTextObjects();
+        }
+
+        private void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+            {
+                if (!_messageInput.enabled)
+                {
+                    DisplayTextObjects();
+                    if (_activeCoroutine != null)
                     {
-                        _messageLogHead = _messageLogHead.GetNext();
-                    }
-                    else
-                    {
-                        _messageLogCount++;
+                        StopCoroutine(_activeCoroutine);
                     }
                 }
-                _messageLogObject.text = GetMessageLog();
+                else
+                {
+                    string message = _messageInput.text;
+                    AddMessage(_player.Gamertag, message);
+                    _server.doStuff(_player.Gamertag, message);
+                    //if (IsClient && IsLocalPlayer)
+                    //{
+                    //    _playerMovement.ProcessLocalPlayerMovement(movementInput, lookInput);
+                    //}
+                    //else
+                    //{
+                    //    _playerMovement.ProcessSimulatedPlayerMovement();
+                    //}
 
-                _messageField.text = "";
-                _messageInput.enabled = false;
-                _placeholderMessage.SetActive(false);
-                _messageBackground.enabled = false;
-
-                _activeCoroutine = HideTimer();
-                StartCoroutine(_activeCoroutine);
+                }
             }
         }
     }

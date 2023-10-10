@@ -2,10 +2,10 @@ using GameFramework.Core.Data;
 
 public class Message
 {
-    private LobbyPlayerData _player;
+    private string _player;
     private string _message;
 
-    public Message(LobbyPlayerData player, string message)
+    public Message(string player, string message)
     {
         _player = player;
         _message = message;
@@ -18,7 +18,7 @@ public class Message
 
     public string GetId()
     {
-        return _player.Gamertag;
+        return _player;
     }
 
     public override string ToString()
@@ -29,7 +29,7 @@ public class Message
         }
         else
         {
-            return _player.Gamertag + ": " + _message;
+            return _player + ": " + _message;
         }
     }
 }
