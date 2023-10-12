@@ -5,8 +5,8 @@ using UnityEngine.UI;
 using Game;
 using GameFramework.Core.Data;
 using Unity.Services.Lobbies.Models;
-using GameFramework.Events;
-using GameFramework.Network.Chat;
+using Game.Events;
+using Unity.Netcode;
 
 namespace GameFramework.Core.GameFramework.Manager
 {
@@ -26,7 +26,9 @@ namespace GameFramework.Core.GameFramework.Manager
         private GameLobbyManager _gameLobby;
         private LobbyPlayerData _player;
 
-        private NetworkTextComponent _server;
+        private TextMessageHandler _server;
+
+        private PlayerControl _playerControl;
 
 
         private IEnumerator _activeCoroutine;
@@ -46,13 +48,16 @@ namespace GameFramework.Core.GameFramework.Manager
 
             _gameLobby = GameLobbyManager.Instance;
             _player = _gameLobby.GetLocalPlayer();
-            _server = (NetworkTextComponent)gameObject.GetComponent(typeof(NetworkTextComponent));
-            //var a = NetworkManager.Instance;
+            _server = (TextMessageHandler)gameObject.GetComponent(typeof(TextMessageHandler));
+
+            MessageEvents.OnMessageReceived += AddMessage;
+
+            _playerControl = new PlayerControl();
         }
 
         private void OnDisable()
         {
-
+            MessageEvents.OnMessageReceived -= AddMessage;
         }
 
         private string GetMessageLog()
@@ -73,7 +78,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
         public void AddMessage(string player, string message)
         {
-            Debug.Log(message);
+            Debug.Log(player + " " + message);
             if (_messageLogHead == null)
             {
                 _messageLogHead = new DoublyLinkedList<Message>(new Message(player, message));
@@ -94,6 +99,12 @@ namespace GameFramework.Core.GameFramework.Manager
                 }
             }
             _messageLogObject.text = GetMessageLog();
+            _messageLogObject.enabled = true;
+
+            if (_activeCoroutine != null)
+            {
+                StopCoroutine(_activeCoroutine);
+            }
 
             _messageField.text = "";
             _messageInput.enabled = false;
@@ -130,7 +141,6 @@ namespace GameFramework.Core.GameFramework.Manager
 
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
@@ -142,21 +152,22 @@ namespace GameFramework.Core.GameFramework.Manager
                     {
                         StopCoroutine(_activeCoroutine);
                     }
+                    _playerControl.Disable();
                 }
                 else
                 {
                     string message = _messageInput.text;
-                    AddMessage(_player.Gamertag, message);
-                    _server.doStuff(_player.Gamertag, message);
-                    //if (IsClient && IsLocalPlayer)
-                    //{
-                    //    _playerMovement.ProcessLocalPlayerMovement(movementInput, lookInput);
-                    //}
-                    //else
-                    //{
-                    //    _playerMovement.ProcessSimulatedPlayerMovement();
-                    //}
-
+                    
+                    if (NetworkManager.Singleton.IsServer)
+                    {
+                        AddMessage(_player.Gamertag, message);
+                        _server.SendUnnamedMessage(_player.Gamertag, message);
+                    }
+                    else
+                    {
+                        _server.SendUnnamedMessage(_player.Gamertag, message);
+                    }
+                    _playerControl.Enable();
                 }
             }
         }
