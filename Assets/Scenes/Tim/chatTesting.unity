@@ -432,6 +432,8 @@ GameObject:
   - component: {fileID: 854906352}
   - component: {fileID: 854906351}
   - component: {fileID: 854906350}
+  - component: {fileID: 854906355}
+  - component: {fileID: 854906354}
   m_Layer: 5
   m_Name: InputField (TMP)
   m_TagString: Untagged
@@ -607,6 +609,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854906348}
   m_CullTransparentMesh: 1
+--- !u!114 &854906354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854906348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 457603517
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &854906355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854906348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522f48d2d25368144b35a11b803022f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &973292350
 GameObject:
   m_ObjectHideFlags: 0

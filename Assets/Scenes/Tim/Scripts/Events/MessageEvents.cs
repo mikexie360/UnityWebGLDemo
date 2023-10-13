@@ -9,5 +9,8 @@ namespace Game.Events
 
         public delegate void MessageReceived(string id, string message);
         public static MessageReceived OnMessageReceived;
+
+        public delegate void PlayerControlReceived(PlayerControl control);
+        public static PlayerControlReceived GetPlayerControl;
     }
 }

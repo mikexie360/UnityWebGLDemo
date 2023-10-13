@@ -5,6 +5,7 @@ using Game;
 using GameFramework.Network.Movement;
 using Unity.Netcode;
 using UnityEngine;
+using Game.Events;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
@@ -40,6 +41,7 @@ public class PlayerController : NetworkBehaviour
 
         _playerControl = new PlayerControl();
         _playerControl.Enable();
+        MessageEvents.GetPlayerControl.Invoke(_playerControl);
 
         Cursor.lockState = CursorLockMode.Locked;
     }

@@ -7,6 +7,7 @@ using GameFramework.Core.Data;
 using Unity.Services.Lobbies.Models;
 using Game.Events;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 namespace GameFramework.Core.GameFramework.Manager
 {
@@ -51,13 +52,21 @@ namespace GameFramework.Core.GameFramework.Manager
             _server = (TextMessageHandler)gameObject.GetComponent(typeof(TextMessageHandler));
 
             MessageEvents.OnMessageReceived += AddMessage;
+            MessageEvents.GetPlayerControl += SetControl;
 
-            _playerControl = new PlayerControl();
+            //Debug.Log(GameObject.FindGameObjectsWithTag("Player").Length);
+            //_playerControl = (PlayerController)(GameObject.Find("/PlayerPrefab(Clone)").GetComponent(typeof(PlayerController)));
         }
 
         private void OnDisable()
         {
             MessageEvents.OnMessageReceived -= AddMessage;
+            MessageEvents.GetPlayerControl -= SetControl;
+        }
+
+        private void SetControl(PlayerControl control)
+        {
+            _playerControl = control;
         }
 
         private string GetMessageLog()
@@ -106,11 +115,6 @@ namespace GameFramework.Core.GameFramework.Manager
                 StopCoroutine(_activeCoroutine);
             }
 
-            _messageField.text = "";
-            _messageInput.enabled = false;
-            _placeholderMessage.SetActive(false);
-            _messageBackground.enabled = false;
-
             _activeCoroutine = HideTimer();
             StartCoroutine(_activeCoroutine);
         }
@@ -118,11 +122,20 @@ namespace GameFramework.Core.GameFramework.Manager
         private void DisplayTextObjects()
         {
             _messageLogObject.enabled = true;
+            WaitFrame();
             _messageField.Select();
             _messageField.ActivateInputField();
+            _messageField.Select();
             _messageInput.enabled = true;
             _placeholderMessage.SetActive(true);
             _messageBackground.enabled = true;
+        }
+
+        public IEnumerator WaitFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            _messageField.Select();
+            _messageField.ActivateInputField();
         }
 
         private void HideTextObjects()
@@ -167,6 +180,13 @@ namespace GameFramework.Core.GameFramework.Manager
                     {
                         _server.SendUnnamedMessage(_player.Gamertag, message);
                     }
+
+                    _messageField.text = "";
+                    _messageInput.enabled = false;
+                    _placeholderMessage.SetActive(false);
+                    _messageBackground.enabled = false;
+
+                    Debug.Log(_playerControl);
                     _playerControl.Enable();
                 }
             }
