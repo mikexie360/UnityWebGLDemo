@@ -29,7 +29,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
         private TextMessageHandler _server;
 
-        private PlayerControl _playerControl;
+        private PlayerController _playerControl;
 
 
         private IEnumerator _activeCoroutine;
@@ -49,24 +49,17 @@ namespace GameFramework.Core.GameFramework.Manager
 
             _gameLobby = GameLobbyManager.Instance;
             _player = _gameLobby.GetLocalPlayer();
+
             _server = (TextMessageHandler)gameObject.GetComponent(typeof(TextMessageHandler));
 
             MessageEvents.OnMessageReceived += AddMessage;
-            MessageEvents.GetPlayerControl += SetControl;
 
-            //Debug.Log(GameObject.FindGameObjectsWithTag("Player").Length);
-            //_playerControl = (PlayerController)(GameObject.Find("/PlayerPrefab(Clone)").GetComponent(typeof(PlayerController)));
+
         }
 
         private void OnDisable()
         {
             MessageEvents.OnMessageReceived -= AddMessage;
-            MessageEvents.GetPlayerControl -= SetControl;
-        }
-
-        private void SetControl(PlayerControl control)
-        {
-            _playerControl = control;
         }
 
         private string GetMessageLog()
@@ -122,20 +115,11 @@ namespace GameFramework.Core.GameFramework.Manager
         private void DisplayTextObjects()
         {
             _messageLogObject.enabled = true;
-            WaitFrame();
-            _messageField.Select();
-            _messageField.ActivateInputField();
-            _messageField.Select();
             _messageInput.enabled = true;
             _placeholderMessage.SetActive(true);
             _messageBackground.enabled = true;
-        }
-
-        public IEnumerator WaitFrame()
-        {
-            yield return new WaitForEndOfFrame();
-            _messageField.Select();
             _messageField.ActivateInputField();
+            _messageField.Select();
         }
 
         private void HideTextObjects()
@@ -158,14 +142,26 @@ namespace GameFramework.Core.GameFramework.Manager
         {
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
+                if (_playerControl == null)
+                {
+                    try
+                    {
+                        _playerControl = (PlayerController)NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent(typeof(PlayerController));
+                    }
+                    catch (System.Exception e) { Debug.Log(e); }
+                }
                 if (!_messageInput.enabled)
                 {
+                    if (_playerControl != null)
+                    {
+                        _playerControl.GetControl().Disable();
+                    }
+
                     DisplayTextObjects();
                     if (_activeCoroutine != null)
                     {
                         StopCoroutine(_activeCoroutine);
                     }
-                    _playerControl.Disable();
                 }
                 else
                 {
@@ -186,8 +182,10 @@ namespace GameFramework.Core.GameFramework.Manager
                     _placeholderMessage.SetActive(false);
                     _messageBackground.enabled = false;
 
-                    Debug.Log(_playerControl);
-                    _playerControl.Enable();
+                    if (_playerControl != null)
+                    {
+                        _playerControl.GetControl().Enable();
+                    }
                 }
             }
         }

@@ -77,3 +77,5 @@ crashlytics-build.properties
 /Assets/Vuplex.*
 UserSettings/Layouts/default-2022.dwlt
 UserSettings/EditorUserSettings.asset
+ProjectSettings/UnityConnectSettings.asset
+ProjectSettings/Packages/com.unity.connect.share/Settings.json
