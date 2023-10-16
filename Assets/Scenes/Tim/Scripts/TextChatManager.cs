@@ -162,6 +162,7 @@ namespace GameFramework.Core.GameFramework.Manager
                     {
                         StopCoroutine(_activeCoroutine);
                     }
+                    Cursor.lockState = CursorLockMode.None;
                 }
                 else
                 {
@@ -186,6 +187,7 @@ namespace GameFramework.Core.GameFramework.Manager
                     {
                         _playerControl.GetControl().Enable();
                     }
+                    Cursor.lockState = CursorLockMode.Locked;
                 }
             }
         }
