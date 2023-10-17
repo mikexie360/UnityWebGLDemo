@@ -16,8 +16,10 @@ namespace GameFramework.Core.GameFramework.Manager
         private TMPro.TextMeshProUGUI _messageLogObject;
         private DoublyLinkedList<Message> _messageLogHead;
         private DoublyLinkedList<Message> _messageLogTail;
-        private int _messageLogCount = 0;
-        private const int MAX_MESSAGE_LOG = 50;
+        private Scrollbar _messageSrollRect;
+        //private int _messageLogCount = 0;
+        //private const int MAX_MESSAGE_LOG = 50;
+        private int _fillerCount = 11;
 
         private TMPro.TextMeshProUGUI _messageInput;
         private GameObject _placeholderMessage;
@@ -35,7 +37,8 @@ namespace GameFramework.Core.GameFramework.Manager
         private IEnumerator _activeCoroutine;
         private void OnEnable()
         {
-            _messageLogObject = gameObject.transform.parent.Find("Log").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+            _messageLogObject = gameObject.transform.parent.Find("Scroll View").Find("Viewport").GetChild(0).gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+            _messageSrollRect = gameObject.transform.parent.Find("Scroll View").Find("Scrollbar Vertical").gameObject.GetComponent<Scrollbar>();
 
             _messageInput = gameObject.transform.GetChild(0).gameObject.transform.Find("Text").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
             _placeholderMessage = gameObject.transform.GetChild(0).gameObject.transform.Find("Placeholder").gameObject;
@@ -54,12 +57,19 @@ namespace GameFramework.Core.GameFramework.Manager
 
             MessageEvents.OnMessageReceived += AddMessage;
 
-
         }
 
         private void OnDisable()
         {
             MessageEvents.OnMessageReceived -= AddMessage;
+        }
+
+        private void AddFiller(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                _messageLogObject.text += "\n";
+            }
         }
 
         private string GetMessageLog()
@@ -85,12 +95,14 @@ namespace GameFramework.Core.GameFramework.Manager
             {
                 _messageLogHead = new DoublyLinkedList<Message>(new Message(player, message));
                 _messageLogTail = _messageLogHead;
-                _messageLogCount = 1;
+                //_messageLogCount = 1;
             }
             else
             {
+                
                 _messageLogTail.SetNext(new DoublyLinkedList<Message>(new Message(player, message), _messageLogTail));
                 _messageLogTail = _messageLogTail.GetNext();
+                /*
                 if (_messageLogCount >= MAX_MESSAGE_LOG)
                 {
                     _messageLogHead = _messageLogHead.GetNext();
@@ -99,8 +111,15 @@ namespace GameFramework.Core.GameFramework.Manager
                 {
                     _messageLogCount++;
                 }
+                */
             }
-            _messageLogObject.text = GetMessageLog();
+            _messageLogObject.text = "";
+            if (_fillerCount >= 0)
+            {
+                AddFiller(_fillerCount);
+                _fillerCount--;
+            }
+            _messageLogObject.text += GetMessageLog();
             _messageLogObject.enabled = true;
 
             if (_activeCoroutine != null)
@@ -110,6 +129,14 @@ namespace GameFramework.Core.GameFramework.Manager
 
             _activeCoroutine = HideTimer();
             StartCoroutine(_activeCoroutine);
+        }
+
+        private void LateUpdate()
+        {
+            if (!_messageInput.enabled)
+            {
+                _messageSrollRect.value = 0;
+            }
         }
 
         private void DisplayTextObjects()
@@ -167,16 +194,7 @@ namespace GameFramework.Core.GameFramework.Manager
                 else
                 {
                     string message = _messageInput.text;
-                    
-                    if (NetworkManager.Singleton.IsServer)
-                    {
-                        AddMessage(_player.Gamertag, message);
-                        _server.SendUnnamedMessage(_player.Gamertag, message);
-                    }
-                    else
-                    {
-                        _server.SendUnnamedMessage(_player.Gamertag, message);
-                    }
+                    var temp = message.Trim();
 
                     _messageField.text = "";
                     _messageInput.enabled = false;
@@ -188,6 +206,21 @@ namespace GameFramework.Core.GameFramework.Manager
                         _playerControl.GetControl().Enable();
                     }
                     Cursor.lockState = CursorLockMode.Locked;
+
+                    if (temp.Equals("") || (temp.Length == 1 && temp.ToCharArray()[0] == 8203))
+                    {
+                        return;
+                    }
+
+                    if (NetworkManager.Singleton.IsServer)
+                    {
+                        AddMessage(_player.Gamertag, message);
+                        _server.SendUnnamedMessage(_player.Gamertag, message);
+                    }
+                    else
+                    {
+                        _server.SendUnnamedMessage(_player.Gamertag, message);
+                    }
                 }
             }
         }
