@@ -13,6 +13,7 @@ namespace GameFramework.Core.GameFramework.Manager
 {
     public class TextChatManager : Singleton<TextChatManager>
     {
+        private GameObject _messageContainer;
         private TMPro.TextMeshProUGUI _messageLogObject;
         private DoublyLinkedList<Message> _messageLogHead;
         private DoublyLinkedList<Message> _messageLogTail;
@@ -37,18 +38,16 @@ namespace GameFramework.Core.GameFramework.Manager
         private IEnumerator _activeCoroutine;
         private void OnEnable()
         {
-            _messageLogObject = gameObject.transform.parent.Find("Scroll View").Find("Viewport").GetChild(0).gameObject.GetComponent<TMPro.TextMeshProUGUI>();
-            _messageSrollRect = gameObject.transform.parent.Find("Scroll View").Find("Scrollbar Vertical").gameObject.GetComponent<Scrollbar>();
+            _messageContainer = gameObject.transform.parent.Find("Scroll View").gameObject;
+            _messageLogObject = _messageContainer.transform.Find("Viewport").GetChild(0).gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+            _messageSrollRect = _messageContainer.transform.Find("Scrollbar Vertical").gameObject.GetComponent<Scrollbar>();
 
             _messageInput = gameObject.transform.GetChild(0).gameObject.transform.Find("Text").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
             _placeholderMessage = gameObject.transform.GetChild(0).gameObject.transform.Find("Placeholder").gameObject;
             _messageField = gameObject.GetComponent<TMPro.TMP_InputField>();
             _messageBackground = GetComponent<Image>();
 
-            _messageLogObject.enabled = false;
-            _messageInput.enabled = false;
-            _placeholderMessage.SetActive(false);
-            _messageBackground.enabled = false;
+            HideTextObjects();
 
             _gameLobby = GameLobbyManager.Instance;
             _player = _gameLobby.GetLocalPlayer();
@@ -141,6 +140,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
         private void DisplayTextObjects()
         {
+            _messageContainer.GetComponent<Image>().enabled = true;
             _messageLogObject.enabled = true;
             _messageInput.enabled = true;
             _placeholderMessage.SetActive(true);
@@ -151,7 +151,11 @@ namespace GameFramework.Core.GameFramework.Manager
 
         private void HideTextObjects()
         {
+            _messageContainer.GetComponent<Image>().enabled = false;
             _messageLogObject.enabled = false;
+            _messageInput.enabled = false;
+            _placeholderMessage.SetActive(false);
+            _messageBackground.enabled = false;
         }
 
         private IEnumerator HideTimer()
@@ -209,6 +213,7 @@ namespace GameFramework.Core.GameFramework.Manager
 
                     if (temp.Equals("") || (temp.Length == 1 && temp.ToCharArray()[0] == 8203))
                     {
+                        HideTextObjects();
                         return;
                     }
 
