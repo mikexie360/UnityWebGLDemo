@@ -119,6 +119,7 @@ namespace GameFramework.Core.GameFramework.Manager
                 _fillerCount--;
             }
             _messageLogObject.text += GetMessageLog();
+            _messageContainer.GetComponent<Image>().enabled = true;
             _messageLogObject.enabled = true;
 
             if (_activeCoroutine != null)
@@ -161,7 +162,10 @@ namespace GameFramework.Core.GameFramework.Manager
         private IEnumerator HideTimer()
         {
             yield return new WaitForSeconds(5f);
-            HideTextObjects();
+            if (!_messageInput.enabled)
+            {
+                HideTextObjects();
+            }
         }
 
         private void Start()
