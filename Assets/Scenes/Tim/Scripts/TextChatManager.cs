@@ -34,8 +34,8 @@ namespace GameFramework.Core.GameFramework.Manager
 
         private PlayerController _playerControl;
 
-
         private IEnumerator _activeCoroutine;
+
         private void OnEnable()
         {
             _messageContainer = gameObject.transform.parent.Find("Scroll View").gameObject;

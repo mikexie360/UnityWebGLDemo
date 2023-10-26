@@ -4,16 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using Game;
 using Game.Events;
+using Unity.Netcode;
 
 public class MicrophoneSetup : MonoBehaviour
 {
-    // Start is called before the first frame update
     private AudioSource _audio;
     public Button toggle;
     private bool buttonStatus = true;
+    private IEnumerator _activeCoroutine;
+    private AudioClip _mic;
+    private AudioHandler _server;
+
     void Start()
     {
         _audio = GetComponent<AudioSource>();
+        _server = (AudioHandler)gameObject.GetComponent(typeof(AudioHandler));
         toggle.onClick.AddListener(delegate
         {
             buttonStatus = !buttonStatus;
@@ -25,6 +30,8 @@ public class MicrophoneSetup : MonoBehaviour
                 _audio.Stop();
             }
         });
+        SettingEvents.OnInputUpdated += OnInputUpdated;
+        SettingEvents.OnOutputUpdated += OnOutputUpdated;
         ChangeMic();
     }
 
@@ -33,23 +40,46 @@ public class MicrophoneSetup : MonoBehaviour
         ChangeMic();
     }
 
+    private void OnEnable()
+    {
+        AudioEvents.OnAudioReceived += PlayAudio;
+    }
+
+    private void OnDisable()
+    {
+        AudioEvents.OnAudioReceived += PlayAudio;
+    }
+
     void ChangeMic()
     {
-        _audio.Stop();
-        var mic = new Microphone();
-        _audio.clip = Microphone.Start(DeviceManager.Instance.GetInput(), true, 10, 44100);
-        _audio.loop = true;
-        SettingEvents.OnInputUpdated += OnInputUpdated;
-        SettingEvents.OnOutputUpdated += OnOutputUpdated;
-        while (!(Microphone.GetPosition(null) > 0))
-        {
+        _mic = Microphone.Start(DeviceManager.Instance.GetInput(), true, 20, AudioSettings.outputSampleRate);
+    }
 
-        }
-        Debug.Log("a");
-        if (buttonStatus)
+    private void PlayAudio(int samples, int channels, int frequency, float[] data)
+    {
+        AudioClip result = AudioClip.Create("temp", samples, channels, frequency, false);
+        result.SetData(data, 0);
+        _audio.PlayOneShot(result);
+    }
+
+    private IEnumerator SendData()
+    {
+        yield return new WaitForSeconds(1f);
+        //_audio.Stop();
+        int length = AudioSettings.outputSampleRate * _mic.channels;
+        float[] data = new float[length];
+        int startPosition = Microphone.GetPosition(DeviceManager.Instance.GetInput());
+        try
         {
-            _audio.Play();
+            _mic.GetData(data, startPosition - length);
+        } catch (System.Exception e)
+        {
+            Debug.Log("error");
+            Debug.Log(startPosition);
+            Debug.Log(length);
         }
+        _server.SendUnnamedMessage(_mic.samples, _mic.channels, _mic.frequency, data);
+        _activeCoroutine = null;
     }
 
     private void OnOutputUpdated(string output)
@@ -57,9 +87,12 @@ public class MicrophoneSetup : MonoBehaviour
         //outputDevice = output;
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if (_activeCoroutine == null)
+        {
+            _activeCoroutine = SendData();
+            StartCoroutine(_activeCoroutine);
+        }
     }
 }
