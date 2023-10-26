@@ -26,6 +26,8 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             cvm.Priority = 1;
+            AudioListener listener = _camTransform.parent.Find("Camera").gameObject.GetComponent<AudioListener>();
+            listener.enabled = true;
         }
         else
         {
