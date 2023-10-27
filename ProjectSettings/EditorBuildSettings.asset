@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mike/Scenes/Maps/RedScene.unity
     guid: e1f6fc0516fe51948b76fb105bc701ad
+  - enabled: 1
+    path: Assets/DannyPlayerMovement/GameScene.unity
+    guid: d693c53935160a2459e4de526f4f6a59
   m_configObjects: {}
