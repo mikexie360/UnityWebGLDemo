@@ -72,6 +72,11 @@ public class PlayerController : NetworkBehaviour
         }*/
     }
 
+    public PlayerControl GetControl()
+    {
+        return _playerControl;
+    }
+
 /*    [ServerRpc]
     private void UseButtonServerRpc()
     {
