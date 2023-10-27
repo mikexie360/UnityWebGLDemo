@@ -75,9 +75,12 @@ crashlytics-build.properties
 # gitignore all paid software
 /Assets/Vuplex/*
 /Assets/Vuplex.*
-ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+
+UserSettings/Layouts/default-2022.dwlt
 UserSettings/EditorUserSettings.asset
-UserSettings/Layouts/default-2022.dwlt
-ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
-ProjectSettings/EditorBuildSettings.asset
-UserSettings/Layouts/default-2022.dwlt
+ProjectSettings/UnityConnectSettings.asset
+ProjectSettings/Packages/com.unity.connect.share/Settings.json
+Assets/Resources/PerformanceTestRunInfo.json
+Assets/Resources/PerformanceTestRunInfo.json.meta
+Assets/Resources/PerformanceTestRunSettings.json
+Assets/Resources/PerformanceTestRunSettings.json.meta
