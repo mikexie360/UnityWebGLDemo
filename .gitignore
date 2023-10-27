@@ -75,6 +75,7 @@ crashlytics-build.properties
 # gitignore all paid software
 /Assets/Vuplex/*
 /Assets/Vuplex.*
+
 UserSettings/Layouts/default-2022.dwlt
 UserSettings/EditorUserSettings.asset
 ProjectSettings/UnityConnectSettings.asset
