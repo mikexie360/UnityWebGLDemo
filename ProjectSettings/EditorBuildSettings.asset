@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mike/Scenes/Maps/DemoTheater.unity
     guid: e416c9e5bff768243b09a1532c965375
+  - enabled: 1
+    path: Assets/Scenes/Mike/Scenes/Maps/TwitchTheater.unity
+    guid: b7972257537a1134f9325a6b7bbbeffb
   m_configObjects: {}

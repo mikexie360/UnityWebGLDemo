@@ -25,3 +25,6 @@ MonoBehaviour:
   - MapThumbnail: {r: 0.3175952, g: 0.3175952, b: 0.3679245, a: 1}
     MapName: Demo Theater
     SceneName: DemoTheater
+  - MapThumbnail: {r: 0.6415094, g: 0.43271625, b: 0.43271625, a: 1}
+    MapName: Twitch Theater
+    SceneName: TwitchTheater
