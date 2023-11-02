@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: Resolution
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 472920848416527292, guid: 778ce93c758c6524e90691af67f2dedf, type: 3}
+      propertyPath: _cachedView
+      value: 
+      objectReference: {fileID: 6865287575913714767}
     - target: {fileID: 1603753467382916735, guid: 778ce93c758c6524e90691af67f2dedf, type: 3}
       propertyPath: m_LocalPosition.z
       value: -59.9
@@ -199,3 +203,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8470746624130523014, guid: 778ce93c758c6524e90691af67f2dedf, type: 3}
   m_PrefabInstance: {fileID: 6474033814901932723}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6865287575913714767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 476825040149911292, guid: 778ce93c758c6524e90691af67f2dedf, type: 3}
+  m_PrefabInstance: {fileID: 6474033814901932723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5494d9d7c39544539adab71793f4a16a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
