@@ -27,6 +27,7 @@ public class AudioHandler : NetworkBehaviour
         reader.ReadValueSafe(out int frequency);
         reader.ReadValueSafe(out float[] data);
         //reader.ReadValueSafe(out string message);
+        Debug.Log("recieved message");
         if (IsServer)
         {
             if (clientId != NetworkManager.ServerClientId)
@@ -36,6 +37,7 @@ public class AudioHandler : NetworkBehaviour
                 SendUnnamedMessage(samples, channels, frequency, data);
                 AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             }
+            AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             // As an example, we can also broadcast the client message to everyone
             //SendUnnamedMessage($"Newly connected client sent this greeting: \"{stringMessage}\"");
         }
@@ -69,7 +71,7 @@ public class AudioHandler : NetworkBehaviour
     /// <param name="dataToSend"></param>
     public virtual void SendUnnamedMessage(int samples, int channels, int frequency, float[] data)
     {
-        var writer = new FastBufferWriter((data.Length * 4) + 100, Allocator.Temp);
+        var writer = new FastBufferWriter((data.Length * 5) + 100, Allocator.Temp);
         var customMessagingManager = NetworkManager.CustomMessagingManager;
         // Tip: Placing the writer within a using scope assures it will
         // be disposed upon leaving the using scope
@@ -87,12 +89,12 @@ public class AudioHandler : NetworkBehaviour
             {
                 // This is a server-only method that will broadcast the unnamed message.
                 // Caution: Invoking this method on a client will throw an exception!
-                customMessagingManager.SendUnnamedMessageToAll(writer);
+                customMessagingManager.SendUnnamedMessageToAll(writer, NetworkDelivery.ReliableFragmentedSequenced);
             }
             else
             {
                 // This method can be used by a client or server (client to server or server to client)
-                customMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId, writer);
+                customMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId, writer, NetworkDelivery.ReliableFragmentedSequenced);
             }
         }
     }
