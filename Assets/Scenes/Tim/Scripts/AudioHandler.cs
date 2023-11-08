@@ -32,10 +32,10 @@ public class AudioHandler : NetworkBehaviour
         {
             if (clientId != NetworkManager.ServerClientId)
             {
+                Debug.Log("server got client message");
                 //Debug.Log($"Server received unnamed message of type ({MessageType()}) from client " +
                 //    $"({clientId}) that contained the string: \"{id}\"");
                 SendUnnamedMessage(samples, channels, frequency, data);
-                AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             }
             AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             // As an example, we can also broadcast the client message to everyone
@@ -44,6 +44,7 @@ public class AudioHandler : NetworkBehaviour
         else
         {
             //AddMessage(id, message);
+            Debug.Log("client got message");
             AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             //Debug.Log(id);
         }

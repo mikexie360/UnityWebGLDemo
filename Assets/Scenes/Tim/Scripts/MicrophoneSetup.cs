@@ -14,7 +14,7 @@ public class MicrophoneSetup : MonoBehaviour
     private IEnumerator _activeCoroutine;
     private AudioClip _mic;
     private AudioHandler _server;
-    private float _threshold = 0.01f;
+    private float _threshold = 0.05f;
 
     void Start()
     {
@@ -23,13 +23,6 @@ public class MicrophoneSetup : MonoBehaviour
         toggle.onClick.AddListener(delegate
         {
             buttonStatus = !buttonStatus;
-            //if (buttonStatus)
-            //{
-            //    ChangeMic();
-            //} else
-            //{
-            //    _audio.Stop();
-            //}
         });
         SettingEvents.OnInputUpdated += OnInputUpdated;
         SettingEvents.OnOutputUpdated += OnOutputUpdated;
