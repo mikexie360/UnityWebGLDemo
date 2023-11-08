@@ -94,7 +94,8 @@ public class MicrophoneSetup : MonoBehaviour
             if (GetAverage(data) > _threshold)
             {
                 Debug.Log("average:" + GetAverage(data));
-                _server.SendUnnamedMessage(_mic.samples, _mic.channels, _mic.frequency, data);
+                //_server.SendUnnamedMessage(_mic.samples, _mic.channels, _mic.frequency, data);
+                _server.SendNamedMessage(new AudioData(_mic.samples, _mic.channels, _mic.frequency, data));
             }
         }
         _activeCoroutine = null;
@@ -112,5 +113,35 @@ public class MicrophoneSetup : MonoBehaviour
             _activeCoroutine = SendData();
             StartCoroutine(_activeCoroutine);
         }
+    }
+}
+
+
+public class AudioData : INetworkSerializable
+{
+    private int Samples;
+    private int Channels;
+    private int Frequency;
+    private float[] Data;
+
+    public AudioData(int s, int c, int f, float[] d)
+    {
+        Samples = s;
+        Channels = c;
+        Frequency = f;
+        Data = d;
+    }
+
+    public float[] GetData()
+    {
+        return Data;
+    }
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref Samples);
+        serializer.SerializeValue(ref Channels);
+        serializer.SerializeValue(ref Frequency);
+        serializer.SerializeValue(ref Data);
     }
 }

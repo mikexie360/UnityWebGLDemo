@@ -12,12 +12,14 @@ public class AudioHandler : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        NetworkManager.CustomMessagingManager.OnUnnamedMessage += ReceiveMessage;
+        //NetworkManager.CustomMessagingManager.OnUnnamedMessage += ReceiveMessage;
+        NetworkManager.CustomMessagingManager.RegisterNamedMessageHandler("voice", OnReceiveNamedMessage);
     }
 
     public override void OnNetworkDespawn()
     {
-        NetworkManager.CustomMessagingManager.OnUnnamedMessage -= ReceiveMessage;
+        //NetworkManager.CustomMessagingManager.OnUnnamedMessage -= ReceiveMessage;
+        NetworkManager.CustomMessagingManager.UnregisterNamedMessageHandler("voice");
     }
 
     protected virtual void OnReceivedUnnamedMessage(ulong clientId, FastBufferReader reader)
@@ -26,20 +28,40 @@ public class AudioHandler : NetworkBehaviour
         reader.ReadValueSafe(out int channels);
         reader.ReadValueSafe(out int frequency);
         reader.ReadValueSafe(out float[] data);
-        //reader.ReadValueSafe(out string message);
         Debug.Log("recieved message");
         if (IsServer)
         {
             if (clientId != NetworkManager.ServerClientId)
             {
                 Debug.Log("server got client message");
-                //Debug.Log($"Server received unnamed message of type ({MessageType()}) from client " +
-                //    $"({clientId}) that contained the string: \"{id}\"");
                 SendUnnamedMessage(samples, channels, frequency, data);
+                AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
             }
+        }
+        else
+        {
+            //AddMessage(id, message);
+            Debug.Log("client got message");
             AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
-            // As an example, we can also broadcast the client message to everyone
-            //SendUnnamedMessage($"Newly connected client sent this greeting: \"{stringMessage}\"");
+            //Debug.Log(id);
+        }
+    }
+
+    protected virtual void OnReceiveNamedMessage(ulong clientId, FastBufferReader reader)
+    {
+        reader.ReadValueSafe(out int samples);
+        reader.ReadValueSafe(out int channels);
+        reader.ReadValueSafe(out int frequency);
+        reader.ReadValueSafe(out float[] data);
+        Debug.Log("recieved message");
+        if (IsServer)
+        {
+            if (clientId != NetworkManager.ServerClientId)
+            {
+                Debug.Log("server got client message");
+                SendNamedMessage(new AudioData(samples, channels, frequency, data));
+                AudioEvents.OnAudioReceived.Invoke(samples, channels, frequency, data);
+            }
         }
         else
         {
@@ -55,6 +77,7 @@ public class AudioHandler : NetworkBehaviour
     /// </summary>
     private void ReceiveMessage(ulong clientId, FastBufferReader reader)
     {
+        Debug.Log("Recived message from: " + clientId);
         var messageType = (byte)1;
         // Read the message type value that is written first when we send
         // this unnamed message.
@@ -76,6 +99,7 @@ public class AudioHandler : NetworkBehaviour
         var customMessagingManager = NetworkManager.CustomMessagingManager;
         // Tip: Placing the writer within a using scope assures it will
         // be disposed upon leaving the using scope
+        Debug.Log("i am: " + NetworkManager.LocalClientId + " and server is: " + NetworkManager.ServerClientId);
         using (writer)
         {
             // Write our message type
@@ -90,12 +114,37 @@ public class AudioHandler : NetworkBehaviour
             {
                 // This is a server-only method that will broadcast the unnamed message.
                 // Caution: Invoking this method on a client will throw an exception!
-                customMessagingManager.SendUnnamedMessageToAll(writer, NetworkDelivery.ReliableFragmentedSequenced);
+                //customMessagingManager.SendUnnamedMessageToAll(writer, NetworkDelivery.ReliableFragmentedSequenced);
+                try
+                {
+                    customMessagingManager.SendUnnamedMessage(1, writer, NetworkDelivery.ReliableFragmentedSequenced);
+                } catch (System.Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
             else
             {
                 // This method can be used by a client or server (client to server or server to client)
                 customMessagingManager.SendUnnamedMessage(NetworkManager.ServerClientId, writer, NetworkDelivery.ReliableFragmentedSequenced);
+            }
+        }
+    }
+
+    public virtual void SendNamedMessage(AudioData audioData)
+    {
+        var writer = new FastBufferWriter((audioData.GetData().Length * 5) + 100, Allocator.Temp);
+        var customMessagingManager = NetworkManager.CustomMessagingManager;
+
+        using (writer)
+        {
+            writer.WriteValue<AudioData>(audioData);
+            if (IsServer)
+            {
+                customMessagingManager.SendNamedMessageToAll("voice", writer);
+            } else
+            {
+                customMessagingManager.SendNamedMessage("voice", NetworkManager.ServerClientId, writer);
             }
         }
     }
