@@ -809,7 +809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 6460096150030270282}
-  _isReadyRenderer: {fileID: 0}
+  _isReadyRenderer: {fileID: 5643193856666497120}
 --- !u!114 &7283202525317098983
 MonoBehaviour:
   m_ObjectHideFlags: 0
