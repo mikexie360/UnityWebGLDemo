@@ -1329,7 +1329,7 @@ Canvas:
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_TargetDisplay: 2
+  m_TargetDisplay: 0
 --- !u!224 &926101196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2569,7 +2569,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 472920848416527292, guid: d54b07fac6c91694ab71284c9738137c, type: 3}
       propertyPath: InitialUrl
-      value: https://player.twitch.tv/?channel=SaltyTeemo&parent=127.0.0.1&muted=true
+      value: https://player.twitch.tv/?channel=SaltyTeemo&parent=127.0.0.1&muted=false
       objectReference: {fileID: 0}
     - target: {fileID: 1603753467382916735, guid: d54b07fac6c91694ab71284c9738137c, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2581,7 +2581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1603753467382916735, guid: d54b07fac6c91694ab71284c9738137c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 282
+      value: 332
       objectReference: {fileID: 0}
     - target: {fileID: 1603753467382916735, guid: d54b07fac6c91694ab71284c9738137c, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -16396,6 +16396,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Web Theater Screen (No inputs)
       objectReference: {fileID: 0}
+    - target: {fileID: 4269205419467176562, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269205419467176562, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269205419467176562, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5691378263814747174, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.95
@@ -16482,11 +16494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7224476958537598274, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7224476958537598274, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7224476958537598274, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalRotation.w
