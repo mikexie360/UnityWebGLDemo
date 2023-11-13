@@ -95,7 +95,12 @@ public class MicrophoneSetup : MonoBehaviour
             {
                 Debug.Log("average:" + GetAverage(data));
                 //_server.SendUnnamedMessage(_mic.samples, _mic.channels, _mic.frequency, data);
-                _server.SendNamedMessage(new AudioData(_mic.samples, _mic.channels, _mic.frequency, data));
+                AudioData temp = new AudioData();
+                temp.Samples = _mic.samples;
+                temp.Channels = _mic.channels;
+                temp.Frequency = _mic.frequency;
+                temp.Data = data;
+                _server.SendNamedMessage(temp);
             }
         }
         _activeCoroutine = null;
@@ -119,29 +124,38 @@ public class MicrophoneSetup : MonoBehaviour
 
 public class AudioData : INetworkSerializable
 {
-    private int Samples;
-    private int Channels;
-    private int Frequency;
-    private float[] Data;
+    public int Samples { get; set; }
+    public int Channels { get; set; }
+    public int Frequency { get; set; }
+    public float[] Data { get; set; }
 
-    public AudioData(int s, int c, int f, float[] d)
+    public AudioData()
     {
-        Samples = s;
-        Channels = c;
-        Frequency = f;
-        Data = d;
-    }
-
-    public float[] GetData()
-    {
-        return Data;
     }
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        serializer.SerializeValue(ref Samples);
-        serializer.SerializeValue(ref Channels);
-        serializer.SerializeValue(ref Frequency);
-        serializer.SerializeValue(ref Data);
+        int s = Samples;
+        int c = Channels;
+        int f = Frequency;
+        float[] d = Data;
+        if (serializer.IsWriter)
+        {
+            serializer.SerializeValue(ref s);
+            serializer.SerializeValue(ref c);
+            serializer.SerializeValue(ref f);
+            serializer.SerializeValue(ref d);
+        } else
+        {
+            FastBufferReader reader = serializer.GetFastBufferReader();
+            reader.ReadValueSafe<int>(out s);
+            reader.ReadValueSafe<int>(out c);
+            reader.ReadValueSafe<int>(out f);
+            reader.ReadValueSafe(out d);
+            Samples = s;
+            Channels = c;
+            Frequency = f;
+            Data = d;
+        }
     }
 }
