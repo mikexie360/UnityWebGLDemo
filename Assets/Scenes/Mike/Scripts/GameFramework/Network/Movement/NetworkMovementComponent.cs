@@ -23,6 +23,8 @@ namespace GameFramework.Network.Movement
 
         private Transform _vcamTransform;
 
+        public float currentWalkSpeed = 0f;
+
         private int _tick = 0;
         private float _tickRate = 1f / 60f;
         private float _tickDeltaTime = 0f;
@@ -33,6 +35,8 @@ namespace GameFramework.Network.Movement
 
         public NetworkVariable<TransformState> ServerTransformState = new NetworkVariable<TransformState>();
         public TransformState _previousTransformState;
+
+        [SerializeField] public Animator _animator;
 
         private int _lastProcessedTick = -0;
 
@@ -192,8 +196,10 @@ namespace GameFramework.Network.Movement
             {
                 movement.y = -9.61f;
             }
-
+            
             _cc.Move(movement * _speed * _tickRate);
+            currentWalkSpeed = Mathf.Abs(movement.x) + Mathf.Abs( movement.z);
+            _animator.SetFloat("currentWalkSpeed", currentWalkSpeed);
         }
 
 
