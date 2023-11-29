@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7564212699296422619
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1083556646060569857, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1389483534177857537, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 049bd4e060524e7469b0c2fde84912c6, type: 2}
+    - target: {fileID: 2932815472057392992, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.495
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932815472057392992, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.55400085
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963598307358981537, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_Name
+      value: Character - Blue (3) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4053509097245016649, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9de048a4dc2a09540a7ffd9d367ec80d, type: 2}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -39.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574219751349457564, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5919491284880863191, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 049bd4e060524e7469b0c2fde84912c6, type: 2}
+    - target: {fileID: 8316939786357031133, guid: 3717432470634b948b44167b58d7f289, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 049bd4e060524e7469b0c2fde84912c6, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3717432470634b948b44167b58d7f289, type: 3}
