@@ -18,10 +18,6 @@ public class AudioHandler : NetworkBehaviour
     protected virtual void OnReceiveNamedMessage(ulong clientId, FastBufferReader reader)
     {
         reader.ReadNetworkSerializable<AudioData>(out AudioData data);
-        //reader.ReadValueSafe<AudioData>(out AudioData data);
-        //reader.ReadValueSafe(out int channels);
-        //reader.ReadValueSafe(out int frequency);
-        //reader.ReadValueSafe(out float[] data);
         reader.ReadValueSafe(out bool first);
         Debug.Log("recieved message");
         Debug.Log(clientId);
@@ -34,16 +30,15 @@ public class AudioHandler : NetworkBehaviour
             }
             if (first)
             {
+                Debug.Log("server is sending message");
                 SendNamedMessage(data, false);
             }
 
         }
         else
         {
-            //AddMessage(id, message);
             Debug.Log("client got message");
             AudioEvents.OnAudioReceived.Invoke(data.Samples, data.Channels, data.Frequency, data.Data);
-            //Debug.Log(id);
         }
     }
 
