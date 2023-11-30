@@ -2189,7 +2189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3786552588
+  GlobalObjectIdHash: 3336606762
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -16375,7 +16375,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5691378263814747174, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.95
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5735842358527796428, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_Pivot.x

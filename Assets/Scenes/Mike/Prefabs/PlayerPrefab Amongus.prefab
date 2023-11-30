@@ -1272,7 +1272,7 @@ MonoBehaviour:
   _turnSpeed: 15
   _camSocket: {fileID: 8309828783659069695}
   _vcam: {fileID: 5910168827473612705}
-  _meshFilter: {fileID: 0}
+  _meshFilter: {fileID: 5224642431069729561}
   _color: {r: 0, g: 0, b: 0, a: 0}
   currentWalkSpeed: 0
   _animator: {fileID: 7785907262519408649}
