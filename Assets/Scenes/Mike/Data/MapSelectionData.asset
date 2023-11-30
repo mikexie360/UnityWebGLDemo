@@ -28,3 +28,9 @@ MonoBehaviour:
   - MapThumbnail: {r: 0.8207547, g: 0.4452207, b: 0.47092298, a: 1}
     MapName: Twitch Theater
     SceneName: TwitchTheater
+  - MapThumbnail: {r: 0.80705494, g: 0.8207547, b: 0.19744569, a: 1}
+    MapName: SaltyTeemo Theater
+    SceneName: SaltyTeemoTheater
+  - MapThumbnail: {r: 0.81960785, g: 0.19607843, b: 0.64288265, a: 1}
+    MapName: SaltyTeemo Theater
+    SceneName: SaltyTeemoTheater
