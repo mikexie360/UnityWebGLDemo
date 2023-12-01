@@ -1215,76 +1215,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!1001 &907228110
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1890685906}
-    m_Modifications:
-    - target: {fileID: 293920700789702538, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 267
-      objectReference: {fileID: 0}
-    - target: {fileID: 472920848416527292, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: InitialUrl
-      value: https://player.twitch.tv/?channel=SaltyTeemo&parent=127.0.0.1&muted=false
-      objectReference: {fileID: 0}
-    - target: {fileID: 4845990715920268246, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_Name
-      value: Web Display (No Inputs)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 13.869999
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
---- !u!4 &907228111 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8470746624130523014, guid: 978a4bacf48c40546b9e76671b116031, type: 3}
-  m_PrefabInstance: {fileID: 907228110}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &912593885 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1409868621735424186, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
@@ -2357,11 +2287,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776921019}
   m_CullTransparentMesh: 1
---- !u!4 &1890685906 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3194811734795443509, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
-  m_PrefabInstance: {fileID: 9036013211224371709}
-  m_PrefabAsset: {fileID: 0}
 --- !u!64 &1899255557
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -16441,6 +16366,10 @@ PrefabInstance:
       propertyPath: InitialUrl
       value: https://player.twitch.tv/?channel=SaltyTeemo&parent=127.0.0.1&muted=false
       objectReference: {fileID: 0}
+    - target: {fileID: 7120554076639522736, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
+      propertyPath: InitialUrl
+      value: https://player.twitch.tv/?channel=SaltyTeemo&muted=false&parent=127.0.0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7224476958537598274, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.075
@@ -16497,10 +16426,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 1916292179926219109, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
     - {fileID: 3127965147041908017, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3194811734795443509, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 907228111}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3740169999727766411, guid: 843c88b161d2a7c48b21c31503dfca15, type: 3}
       insertIndex: -1
